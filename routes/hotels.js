@@ -1,27 +1,26 @@
+// this file show us only our routes/endpoints, all the process is in the controllers
+
 import express from 'express';
-import Hotel from '../models/Hotel.js'
+import { getHotel, getHotels, createHotel, updateHotel, deleteHotel } from '../controllers/hotel.js';
+import { verifyAdmin } from '../utils/index.js';
+
 const hotelsRouter = express.Router()
 
-hotelsRouter.get('/', (req, res) => {
-    res.send('hotels')
-})
 
 // GET
-// GET ALL
-// CREATE
-// we use async because we need to connect to our db, create a new collection and a new document and it will take time
-hotelsRouter.post('/', async (req, res) => {
-    const newHotel = new Hotel(req.body)
-    try {
-        const savedHotel = await newHotel.save()
-        res.status(200).json(savedHotel);
-    } catch (error) {
-        res.status(500).json(error);
-    }
-})
-// UPDATE
-// DELETE
+hotelsRouter.get('/:id', getHotel);
 
+// GET ALL
+hotelsRouter.get('/', getHotels);
+
+// CREATE
+hotelsRouter.post('/', verifyAdmin, createHotel);
+
+// UPDATE
+hotelsRouter.put('/:id', verifyAdmin, updateHotel);
+
+// DELETE
+hotelsRouter.delete('/:id', verifyAdmin, deleteHotel);
 
 
 export default hotelsRouter;
