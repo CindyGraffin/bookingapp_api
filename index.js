@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import mongoose from "mongoose";
 import { authRouter, usersRouter, roomsRouter, hotelsRouter } from "./routes/index.js";
 import cookieParser from "cookie-parser";
+import cors from 'cors';
 
 const app = express();
 
@@ -30,6 +31,7 @@ mongoose.connection.on('connected', () => {
 
 
 // middlewares 
+app.use(cors())
 app.use(cookieParser())
 // allow to send json 
 app.use(express.json())
