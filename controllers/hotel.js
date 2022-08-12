@@ -1,4 +1,5 @@
 import Hotel from '../models/Hotel.js'
+import Room from '../models/Room.js'
 
 // we use async because we need to connect to our db, create a new collection and a new document and it will take time
 export const getHotel = async (req, res, next) => {
@@ -85,5 +86,17 @@ export const deleteHotel = async (req, res, next) => {
         res.status(200).json(deletedHotel)
     } catch (err) {
         next(err)
+    }
+}
+
+export const getHotelRooms = async (req, res, next) => {
+    try {
+        const hotel = await Hotel.findById(req.params.id);
+        const list = await Promise.all(hotel.rooms.map(room => {
+            return Room.findById(room);
+        }))
+        res.status(200).json(list)
+    } catch (err) {
+        next(error)
     }
 }
